@@ -1,0 +1,75 @@
+---
+# Install the package
+- name: Install xen package (Debian <= 10)
+  apt:
+    name:
+      - xen-hypervisor-4.11
+    update_cache: yes
+    state: present
+  when:
+    - xen__install
+    - "ansible_distribution_major_version|int <= 10"
+
+- name: Install xen package (Debian >= 11)
+  apt:
+    name:
+      - xen-hypervisor-4.14
+    update_cache: yes
+    state: present
+  when:
+    - xen__install
+    - "ansible_distribution_major_version|int >= 11"
+
+- name: Install xen package
+  apt:
+    name:
+      - xen-tools
+    update_cache: yes
+    state: present
+  when:
+    - xen__install
+
+# Configure skel files for authorized_keys
+- name: Setup skel root directory
+  file:
+    path: /etc/xen-tools/skel/root
+    state: directory
+    mode: 0700
+  when:
+    - xen__configure
+
+# Configure skel files for authorized_keys
+- name: Setup skel root directory
+  file:
+    path: /etc/xen-tools/skel/root/.ssh
+    state: directory
+    mode: 0700
+  when:
+    - xen__configure
+
+# Configure skel files for authorized_keys
+- name: Setup skel file
+  template:
+    src: authorized_keys
+    dest: /etc/xen-tools/skel/root/.ssh/authorized_keys
+    mode: 0644
+  when:
+    - xen__configure
+
+- name: Change xendomains boot order w/ libvirt
+  lineinfile:
+    path: "/etc/init.d/xendomains"
+    regexp: "^# Required-Start:    $syslog $network $remote_fs xen$"
+    line: "# Required-Start:    $syslog $network $remote_fs xen libvirtd"
+  when:
+    - xen__configure
+    - xen__use_libvirt_network
+
+- name: Change xendomains boot order w/ libvirt
+  lineinfile:
+    path: "/etc/init.d/xendomains"
+    regexp: "^# X-Start-Before:    corosync heartbeat libvirtd"
+    line: "# X-Start-Before:    corosync heartbeat"
+  when:
+    - xen__configure
+    - xen__use_libvirt_network

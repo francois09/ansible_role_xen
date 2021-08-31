@@ -1,0 +1,11 @@
+---
+# handlers file for xen
+# - name: Restart xen
+#   service:
+#     name: xen
+#     state: restarted
+# 
+# - name: Reload xen
+#   service:
+#     name: xen
+#     state: reloaded

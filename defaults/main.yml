@@ -1,0 +1,7 @@
+---
+# defaults file for xen
+xen__install: False
+xen__configure: False
+
+xen__use_libvirt_network: false
+...

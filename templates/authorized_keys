@@ -1,0 +1,7 @@
+{% for u in users %}
+{%   if u.name in power_users %}
+{%     for k in u.ssh_keys %}
+{{ k }}
+{%     endfor %}
+{%   endif %}
+{% endfor %}
