@@ -75,3 +75,12 @@
   when:
     - xen__configure
     - xen__use_libvirt_network
+
+- name: Setup default vif script
+  lineinfile:
+    path: "/etc/xen/xl.conf"
+    regexp: "^#vif.default.script="
+    line: 'vif.default.script="vif-openvswitch"'
+  when:
+    - xen__configure
+    - not xen__use_libvirt_network
