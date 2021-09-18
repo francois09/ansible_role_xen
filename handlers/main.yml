@@ -1,5 +1,11 @@
 ---
 # handlers file for xen
+- name: Restart server
+  shell: reboot
+
+- name: Update grub
+  shell: update-grub
+
 # - name: Restart xen
 #   service:
 #     name: xen
