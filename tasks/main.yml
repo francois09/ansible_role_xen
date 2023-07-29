@@ -84,3 +84,9 @@
   when:
     - xen__configure
     - not xen__use_libvirt_network
+
+- name: Create xendomains systemd service file
+  template:
+    src: xendomains.service
+    dest: /etc/systemd/system/xendomains.service
+  when: xen__install
