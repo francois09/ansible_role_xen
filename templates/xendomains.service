@@ -1,0 +1,18 @@
+[Unit]
+Description=Xen domains restart service
+After=xen.service
+Wants=xen.service
+
+#Requires=proc-fs-nfsd.mount
+#After=proc-fs-nfsd.mount
+#After=network.target local-fs.target
+#BindsTo=nfs-server.service
+
+[Service]
+ExecStart=/etc/init.d/xendomains start
+# Restart=always
+# RestartSec=10s
+# User=
+
+[Install]
+WantedBy=multi-user.target
