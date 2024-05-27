@@ -11,7 +11,7 @@
     - xen__install
     - "ansible_distribution_major_version|int <= 10"
 
-- name: Install xen package (Debian >= 11)
+- name: Install xen package (Debian == 11)
   apt:
     name:
       - xen-hypervisor-4.14
@@ -20,7 +20,18 @@
   notify: Update grub
   when:
     - xen__install
-    - "ansible_distribution_major_version|int >= 11"
+    - "ansible_distribution_major_version|int == 11"
+
+- name: Install xen package (Debian >= 12)
+  apt:
+    name:
+      - xen-hypervisor-4.17
+    update_cache: yes
+    state: present
+  notify: Update grub
+  when:
+    - xen__install
+    - "ansible_distribution_major_version|int >= 12"
 
 - name: Install xen tools package
   apt:
