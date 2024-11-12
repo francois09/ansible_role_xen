@@ -3,7 +3,7 @@
 - name: Install xen package (Debian <= 10)
   apt:
     name:
-      - xen-hypervisor-4.11
+      - xen-hypervisor-4.17
     update_cache: yes
     state: present
   notify: Update grub
