@@ -22,7 +22,7 @@
     - xen__install
     - "ansible_distribution_major_version|int == 11"
 
-- name: Install xen package (Debian >= 12)
+- name: Install xen package (Debian == 12)
   apt:
     name:
       - xen-hypervisor-4.17
@@ -31,7 +31,18 @@
   notify: Update grub
   when:
     - xen__install
-    - "ansible_distribution_major_version|int >= 12"
+    - "ansible_distribution_major_version|int == 12"
+
+- name: Install xen package (Debian == 13)
+  apt:
+    name:
+      - xen-hypervisor-4.20
+    update_cache: yes
+    state: present
+  notify: Update grub
+  when:
+    - xen__install
+    - "ansible_distribution_major_version|int == 13"
 
 - name: Install xen tools package
   apt:
@@ -41,6 +52,7 @@
     state: present
   when:
     - xen__install
+    - "ansible_distribution_major_version|int <= 12"
 
 # Configure skel files for authorized_keys
 - name: Setup skel root directory
