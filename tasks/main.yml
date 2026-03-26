@@ -44,7 +44,7 @@
     - xen__install
     - "ansible_distribution_major_version|int == 13"
 
-- name: Install xen tools package
+- name: Install xen tools package (From repository)
   apt:
     name:
       - xen-tools
@@ -53,6 +53,21 @@
   when:
     - xen__install
     - "ansible_distribution_major_version|int <= 12"
+
+- name: Download xen tools package
+  get_url:
+    url: https://xen-tools.org/software/xen-tools/xen-tools_4.9.1-1_all.deb
+    dest: /root/xen-tools_4.9.1-1_all.deb
+  when:
+    - xen__install
+    - "ansible_distribution_major_version|int > 12"
+
+- name: Install xen tools package (From file)
+  shell:
+    cmd: "dpkg -i /root/xen-tools_4.9.1-1_all.deb"
+  when:
+    - xen__install
+    - "ansible_distribution_major_version|int > 12"
 
 # Configure skel files for authorized_keys
 - name: Setup skel root directory
