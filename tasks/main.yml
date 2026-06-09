@@ -54,6 +54,24 @@
     - xen__install
     - "ansible_distribution_major_version|int <= 12"
 
+- name: Install xen tools package dependencies
+  apt:
+    name:
+      - debootstrap
+      - libconfig-inifiles-perl
+      - libdata-validate-domain-perl
+      - libdata-validate-ip-perl
+      - libdata-validate-uri-perl
+      - libfile-slurp-perl
+      - libsort-versions-perl
+      - libterm-ui-perl
+      - libtext-template-perl
+    update_cache: yes
+    state: present
+  when:
+    - xen__install
+    - "ansible_distribution_major_version|int > 12"
+
 - name: Download xen tools package
   get_url:
     url: https://xen-tools.org/software/xen-tools/xen-tools_4.9.1-1_all.deb
@@ -61,6 +79,7 @@
   when:
     - xen__install
     - "ansible_distribution_major_version|int > 12"
+    - xen__xen_tools_download
 
 - name: Install xen tools package (From file)
   shell:
@@ -68,6 +87,7 @@
   when:
     - xen__install
     - "ansible_distribution_major_version|int > 12"
+    - xen__xen_tools_download
 
 # Configure skel files for authorized_keys
 - name: Setup skel root directory
