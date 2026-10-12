@@ -1,0 +1,13 @@
+#!/bin/bash
+# Check status of domains
+
+/sbin/xl list|tail -n +3|while read domain id mem cpu state time
+do
+  # Get status of the domain
+  if [ $state == "---sc-" ]
+  then
+      /sbin/xl destroy $domain
+      /sbin/xl create /etc/xen/${domain}.cfg
+      /usr/local/bin/signal-cli -a "{{ xen__signal_id }}" send -m "Domain $domain was stuck. Restarted." -g '{{ xen__signal_group_id }}'
+  fi
+done

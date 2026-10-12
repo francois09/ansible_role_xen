@@ -148,3 +148,27 @@
     src: xendomains.service
     dest: /etc/systemd/system/xendomains.service
   when: xen__install
+
+- name: Create xen_check_domains file
+  template:
+    src: "xen_check_domains"
+    dest: "/usr/local/bin/xen_check_domains"
+    mode: 0770
+    owner: root
+    group: root
+  when:
+    - xen__install
+    - xen__configure
+
+- name: Create xen_check_domains cron
+  cron:
+    name: "Xen Check domains"
+    cron_file: xen_check_domains
+    state: present
+    hour: "*"
+    minute: "*/10"
+    user: root
+    job: /usr/local/bin/xen_check_domains
+  when:
+    - xen__install
+    - xen__configure
